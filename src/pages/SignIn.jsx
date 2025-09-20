@@ -3,7 +3,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { serverURi } from "../src/App";
+import { serveruri } from "../App";
 
 export default function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -14,11 +14,10 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email, password);
   const handleSignIn = async () => {
     try {
       const result = await axios.post(
-        `${serverURi}/api/auth/signin`,
+        `${serveruri}/api/auth/signin`,
         {
           email,
           password,

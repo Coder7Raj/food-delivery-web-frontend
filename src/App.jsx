@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import SignUp from "../pages/SignUp";
-import SignIn from "../pages/SignIn";
-import ForgotPass from "../pages/ForgotPass";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import ForgotPass from "./pages/ForgotPass";
 
-export const serverURi = "http://localhost:5000";
+export const serveruri = "http://localhost:5000";
 function App() {
   return (
     <Routes>

@@ -3,7 +3,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { serverURi } from "../src/App";
+import { serveruri } from "../App";
 
 export default function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -21,7 +21,7 @@ export default function SignUp() {
   const handleSignUp = async () => {
     try {
       const result = await axios.post(
-        `${serverURi}/api/auth/signup`,
+        `${serveruri}/api/auth/signup`,
         {
           fullName,
           email,
@@ -142,8 +142,9 @@ export default function SignUp() {
           </label>
 
           <div className="flex gap-2">
-            {["user", "owner", "deliveryBoy"].map((r) => (
+            {["user", "owner", "deliveryBoy"].map((r, index) => (
               <button
+                key={index}
                 onClick={() => setRole(r)}
                 style={
                   role == r

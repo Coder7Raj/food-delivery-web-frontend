@@ -2,15 +2,67 @@ import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serveruri } from "../App";
 
 export default function ForgotPass() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [otp, setOtp] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Handler functions can be added here for form submissions
+  const handleSendOTP = async () => {
+    // Logic to send OTP to the provided email
+    try {
+      const result = await axios.post(
+        `${serveruri}/api/auth/send_otp`,
+        { email },
+        { withCredentials: true }
+      );
+      console.log("email", email);
+      console.log("result", result);
+      setStep(2); // Move to OTP verification step
+    } catch (error) {
+      console.log("Error sending OTP:", error);
+    }
+  };
+  // Handle OTP verification
+  const handleVerifyOTP = async () => {
+    // Logic to verify the OTP
+    try {
+      const result = await axios.post(
+        `${serveruri}/api/auth/verify_otp`,
+        { email, otp },
+        { withCredentials: true }
+      );
+      console.log(result);
+      setStep(3); // Move to password reset step
+    } catch (error) {
+      console.log("Error verifying OTP:", error);
+    }
+  };
+  // Handle password reset
+  const handleResetPassword = async () => {
+    if (newPassword != confirmPassword) {
+      return null;
+    }
+    // Logic to reset the password
+    try {
+      const result = await axios.post(
+        `${serveruri}/api/auth/reset_password`,
+        { email, newPassword },
+        { withCredentials: true }
+      );
+      console.log(result);
+      navigate("/signin"); // Redirect to sign-in page after successful password reset
+    } catch (error) {
+      console.log("Error resetting password:", error);
+    }
+  };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[#fff9f6]">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -44,7 +96,10 @@ export default function ForgotPass() {
                 value={email}
               />
             </div>
-            <button className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer">
+            <button
+              onClick={handleSendOTP}
+              className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer"
+            >
               Send OTP
             </button>
           </>
@@ -79,7 +134,10 @@ export default function ForgotPass() {
                 )}
               </span>
             </div>
-            <button className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer">
+            <button
+              onClick={handleVerifyOTP}
+              className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer"
+            >
               Verify OTP
             </button>
           </>
@@ -95,19 +153,19 @@ export default function ForgotPass() {
                 New Password
               </label>
               <input
-                type={password ? "text" : "password"}
+                type={newPassword ? "text" : "password"}
                 className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:border-orange-500"
                 placeholder="Enter your new password"
                 style={{ border: `1px solid #ddd` }}
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
+                onChange={(e) => setNewPassword(e.target.value)}
+                value={newPassword}
               />
               <span
-                onClick={() => setPassword((prev) => !prev)}
+                onClick={() => setNewPassword((prev) => !prev)}
                 className="absolute right-3 top-[38px] cursor-pointer text-gray-500"
-                title={password ? "Hide Password" : "Show Password"}
+                title={newPassword ? "Hide Password" : "Show Password"}
               >
-                {password ? (
+                {newPassword ? (
                   <AiOutlineEyeInvisible size={20} />
                 ) : (
                   <AiOutlineEye size={20} />
@@ -145,7 +203,10 @@ export default function ForgotPass() {
                 )}
               </span>
             </div>
-            <button className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer">
+            <button
+              onClick={handleResetPassword}
+              className="w-full font-semibold text-white rounded-lg py-2 transition duration-200 bg-[#ff4d2d] hover:bg-[#e64323] cursor-pointer"
+            >
               Reset Password
             </button>
           </>
