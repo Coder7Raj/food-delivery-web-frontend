@@ -7,6 +7,8 @@ import { serveruri } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/user.slice";
 
 export default function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -19,6 +21,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleSignUp = async () => {
     try {
@@ -33,6 +36,7 @@ export default function SignUp() {
         },
         { withCredentials: true }
       );
+      dispatch(setUserData(result.data));
       console.log("result", result);
       toast.success("Signup successful!"); // show success toast
     } catch (error) {
@@ -57,9 +61,10 @@ export default function SignUp() {
         },
         { withCredentials: true }
       );
-      console.log("Google auth data:", data);
+      dispatch(setUserData(data));
+      toast.success("Google sign-in successful!");
     } catch (error) {
-      console.log("Google auth error:", error);
+      toast.error(error.response?.data?.message || "Google sign-in failed");
     }
   };
   return (
