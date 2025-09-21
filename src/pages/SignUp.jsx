@@ -4,10 +4,12 @@ import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { serveruri } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
   const primaryColor = "#ff4d2d";
-  //   const hoverColor = "#e64323";
   const bgColor = "#fff9f6";
   const borderColor = "#ddd";
 
@@ -32,9 +34,32 @@ export default function SignUp() {
         { withCredentials: true }
       );
       console.log("result", result);
-      console.log("data", fullName, email, mobile, password, role);
+      toast.success("Signup successful!"); // show success toast
     } catch (error) {
-      console.log("error", error);
+      toast.error(error.response?.data?.message || "Signup failed");
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    if (!mobile) {
+      return toast.error("Mobile number required!");
+    }
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    try {
+      const { data } = await axios.post(
+        `${serveruri}/api/auth/google_auth`,
+        {
+          fullName: result.user.displayName,
+          email: result.user.email,
+          mobile,
+          role,
+        },
+        { withCredentials: true }
+      );
+      console.log("Google auth data:", data);
+    } catch (error) {
+      console.log("Google auth error:", error);
     }
   };
   return (
@@ -68,6 +93,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setFullName(e.target.value)}
             value={fullName}
+            required
           />
         </div>
         {/* email */}
@@ -85,6 +111,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
         {/* mobile */}
@@ -102,6 +129,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setMobile(e.target.value)}
             value={mobile}
+            required
           />
         </div>
         {/* password */}
@@ -119,6 +147,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
           />
           <span
             onClick={() => setShowPassword((prev) => !prev)}
@@ -165,7 +194,10 @@ export default function SignUp() {
           Sign Up
         </button>
         <p className="text-center">or</p>
-        <button className="flex items-center justify-center border gap-2 w-full font-semibold text-black rounded-lg py-2 transition duration-200 hover:bg-gray-200 cursor-pointer">
+        <button
+          onClick={handleGoogleAuth}
+          className="flex items-center justify-center border gap-2 w-full font-semibold text-black rounded-lg py-2 transition duration-200 hover:bg-gray-200 cursor-pointer"
+        >
           <FcGoogle size={20} /> Sign Up with Google
         </button>
         <p className="text-sm text-gray-600 mt-2 text-center">
@@ -177,6 +209,7 @@ export default function SignUp() {
             Sign In
           </Link>
         </p>
+        {/* <p className="text-red-500 text-center">{error}</p> */}
       </div>
     </div>
   );

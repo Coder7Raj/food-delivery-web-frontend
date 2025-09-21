@@ -4,6 +4,9 @@ import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { serveruri } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -25,8 +28,26 @@ export default function SignUp() {
         { withCredentials: true }
       );
       console.log("result", result);
+      toast.success("Signin successful!"); // show success toast
     } catch (error) {
-      console.log("sign in error", error);
+      toast.error(error.response?.data?.message || "SignIn failed");
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    try {
+      const { data } = await axios.post(
+        `${serveruri}/api/auth/google_auth`,
+        {
+          email: result.user.email,
+        },
+        { withCredentials: true }
+      );
+      console.log("Google auth data:", data);
+    } catch (error) {
+      console.log("Google auth error:", error);
     }
   };
   return (
@@ -61,6 +82,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
 
@@ -79,6 +101,7 @@ export default function SignUp() {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
           />
           <span
             onClick={() => setShowPassword((prev) => !prev)}
@@ -107,7 +130,10 @@ export default function SignUp() {
           Sign In
         </button>
         <p className="text-center">or</p>
-        <button className="flex items-center justify-center border gap-2 w-full font-semibold text-black rounded-lg py-2 transition duration-200 hover:bg-gray-200 cursor-pointer">
+        <button
+          onClick={handleGoogleAuth}
+          className="flex items-center justify-center border gap-2 w-full font-semibold text-black rounded-lg py-2 transition duration-200 hover:bg-gray-200 cursor-pointer"
+        >
           <FcGoogle size={20} /> Sign In with Google
         </button>
         <p className="text-sm text-gray-600 mt-2 text-center">

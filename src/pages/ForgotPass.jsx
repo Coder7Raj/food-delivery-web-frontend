@@ -4,6 +4,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serveruri } from "../App";
+import toast from "react-hot-toast";
 
 export default function ForgotPass() {
   const navigate = useNavigate();
@@ -23,11 +24,11 @@ export default function ForgotPass() {
         { email },
         { withCredentials: true }
       );
-      console.log("email", email);
-      console.log("result", result);
+      toast.success("OTP sent to your email!");
+      console.log(" result", result);
       setStep(2); // Move to OTP verification step
     } catch (error) {
-      console.log("Error sending OTP:", error);
+      toast.error(error.response?.data?.message || "Failed to send OTP");
     }
   };
   // Handle OTP verification
@@ -39,16 +40,17 @@ export default function ForgotPass() {
         { email, otp },
         { withCredentials: true }
       );
-      console.log(result);
+      toast.success("OTP verified successfully!");
+      console.log(" result", result);
       setStep(3); // Move to password reset step
     } catch (error) {
-      console.log("Error verifying OTP:", error);
+      toast.error(error.response?.data?.message || "Failed to verify OTP");
     }
   };
   // Handle password reset
   const handleResetPassword = async () => {
     if (newPassword != confirmPassword) {
-      return null;
+      return toast.error("Passwords do not match!");
     }
     // Logic to reset the password
     try {
@@ -57,10 +59,11 @@ export default function ForgotPass() {
         { email, newPassword },
         { withCredentials: true }
       );
-      console.log(result);
+      toast.success("Password reset successful!");
+      console.log(" result", result);
       navigate("/signin"); // Redirect to sign-in page after successful password reset
     } catch (error) {
-      console.log("Error resetting password:", error);
+      toast.error(error.response?.data?.message || "Failed to reset password");
     }
   };
   return (
