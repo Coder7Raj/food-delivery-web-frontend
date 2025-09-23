@@ -1,9 +1,10 @@
 import React from "react";
+import Navbar from "./Navbar";
 
 export default function OwnerDashboard() {
   return (
-    <div>
-      <h1>Owner Dashboard</h1>
+    <div className="w-full h-[100vh] bg-[#fff9f6] flex items-center">
+      <Navbar />
     </div>
   );
 }

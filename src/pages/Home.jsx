@@ -7,7 +7,7 @@ import DeliveryBoy from "../components/DeliveryBoy";
 export default function Home() {
   const { userData } = useSelector((state) => state.user);
   return (
-    <div className="w-[100vh] min-h-[100vh] flex items-center flex-col justify-center">
+    <div className="min-h-[100vh] flex items-center justify-center">
       {userData.role == "user" && <UserDashboard />}
       {userData.role == "owner" && <OwnerDashboard />}
       {userData.role == "deliveryBoy" && <DeliveryBoy />}
