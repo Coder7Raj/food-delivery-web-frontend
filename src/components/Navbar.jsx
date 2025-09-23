@@ -13,6 +13,7 @@ export default function Navbar() {
   const { userData, currentCity } = useSelector((state) => state.user);
   const { myShopData } = useSelector((state) => state.owner);
   const dispatch = useDispatch();
+
   const handleLogout = async () => {
     try {
       const result = await axios.get(`${serveruri}/api/auth/signout`, {
