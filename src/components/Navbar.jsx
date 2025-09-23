@@ -11,6 +11,7 @@ import { TbReceipt2 } from "react-icons/tb";
 
 export default function Navbar() {
   const { userData, city } = useSelector((state) => state.user);
+  const { myShopData } = useSelector((state) => state.owner);
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
@@ -57,7 +58,15 @@ export default function Navbar() {
         </div>
       )}
       {/* owner */}
-      {userData.role == "owner" && (
+      {/* {userData.role == "owner" && (
+        <>
+          <div className="flex gap-1 items-center px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer">
+            <FaPlus size={20} />
+            <span>Add Food Item</span>
+          </div>
+        </>
+      )} */}
+      {myShopData && (
         <>
           <div className="flex gap-1 items-center px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer">
             <FaPlus size={20} />
