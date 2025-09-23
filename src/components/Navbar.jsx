@@ -8,11 +8,13 @@ import axios from "axios";
 import { serveruri } from "../App";
 import toast from "react-hot-toast";
 import { TbReceipt2 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { userData, currentCity } = useSelector((state) => state.user);
   const { myShopData } = useSelector((state) => state.owner);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -69,7 +71,10 @@ export default function Navbar() {
       )} */}
       {myShopData && (
         <>
-          <div className="flex gap-1 items-center px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer">
+          <div
+            onClick={() => navigate("/add_food_items")}
+            className="flex gap-1 items-center px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer"
+          >
             <FaPlus size={20} />
             <span>Add Food Item</span>
           </div>
