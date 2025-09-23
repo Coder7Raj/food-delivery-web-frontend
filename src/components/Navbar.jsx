@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { TbReceipt2 } from "react-icons/tb";
 
 export default function Navbar() {
-  const { userData, city } = useSelector((state) => state.user);
+  const { userData, currentCity } = useSelector((state) => state.user);
   const { myShopData } = useSelector((state) => state.owner);
   const dispatch = useDispatch();
   const handleLogout = async () => {
@@ -36,7 +36,7 @@ export default function Navbar() {
           {/*  */}
           <div className="flex items-center w-[30%] overflow-hidden gap-3 px-3 border-r-2 border-gray-400">
             <FaLocationDot size={25} className="text-[#ff4d2d]" />
-            <div className="w-[80%] truncate text-gray-600">{city}</div>
+            <div className="w-[80%] truncate text-gray-600">{currentCity}</div>
           </div>
           <div className="w-[80%] flex items-center gap-2">
             <IoIosSearch size={25} className="text-[#ff4d2d] cursor-pointer" />

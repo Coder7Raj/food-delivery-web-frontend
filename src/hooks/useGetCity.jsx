@@ -2,7 +2,11 @@ import React from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setCity } from "../redux/user.slice";
+import {
+  setCurrentCity,
+  setCurrentState,
+  setCurrentAddress,
+} from "../redux/user.slice";
 
 export default function useGetCurrentUser() {
   const dispatch = useDispatch();
@@ -17,7 +21,15 @@ export default function useGetCurrentUser() {
           import.meta.env.VITE_GEO_API_KEY
         }`
       );
-      dispatch(setCity(result?.data?.results[0].city));
+      dispatch(setCurrentCity(result?.data?.results[0].city));
+      dispatch(setCurrentState(result?.data?.results[0].state));
+      dispatch(
+        setCurrentAddress(
+          result?.data?.results[0].address_line2 ||
+            result?.data?.results[0].address_line1
+        )
+      );
+      // console.log(result?.data);
     });
   }, [dispatch, userData]);
 }
