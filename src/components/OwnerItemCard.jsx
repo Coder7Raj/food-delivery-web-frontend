@@ -1,9 +1,8 @@
 import React from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
-
+import { useNavigate } from "react-router-dom";
 export default function OwnerItemCard({ data }) {
-  console.log("OwnerItemCard data:", data);
-
+  const navigate = useNavigate();
   return (
     <div className="flex bg-white rounded-lg shadow-md overflow-hidden border border-[#ff4d2d] w-full max-w-2xl">
       {/* Image Section */}
@@ -37,7 +36,11 @@ export default function OwnerItemCard({ data }) {
             {data?.price ? `$${data.price}` : "N/A"}
           </p>
           <div className="flex items-center gap-3 text-[#ff4d2d] cursor-pointer">
-            <FaPen size={18} className="hover:text-orange-600" />
+            <FaPen
+              size={18}
+              className="hover:text-orange-600"
+              onClick={() => navigate(`/edit_food_items/${data._id}`)}
+            />
             <FaTrash size={18} className="hover:text-orange-600" />
           </div>
         </div>

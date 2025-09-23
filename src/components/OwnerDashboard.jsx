@@ -7,7 +7,7 @@ import OwnerItemCard from "./OwnerItemCard";
 
 export default function OwnerDashboard() {
   const { myShopData } = useSelector((state) => state.owner);
-  console.log("my shop data item", myShopData?.item);
+  // console.log("my shop data item", myShopData?.item);
   const navigate = useNavigate();
 
   return (
