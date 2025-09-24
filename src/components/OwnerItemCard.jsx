@@ -1,8 +1,25 @@
+import axios from "axios";
 import React from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { serveruri } from "../App";
+import { setMyShopData } from "../redux/ownerSlice";
+import { useDispatch } from "react-redux";
 export default function OwnerItemCard({ data }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleDelete = async () => {
+    try {
+      const result = await axios.get(
+        `${serveruri}/api/item/delete_item/${data._id}`,
+        { withCredentials: true }
+      );
+      dispatch(setMyShopData(result.data));
+    } catch (error) {
+      console.log("delete item error", error);
+    }
+  };
   return (
     <div className="flex bg-white rounded-lg shadow-md overflow-hidden border border-[#ff4d2d] w-full max-w-2xl">
       {/* Image Section */}
@@ -35,13 +52,16 @@ export default function OwnerItemCard({ data }) {
             <span className="font-bold">Price: </span>
             {data?.price ? `$${data.price}` : "N/A"}
           </p>
-          <div className="flex items-center gap-3 text-[#ff4d2d] cursor-pointer">
-            <FaPen
-              size={18}
-              className="hover:text-orange-600"
-              onClick={() => navigate(`/edit_food_items/${data._id}`)}
-            />
-            <FaTrash size={18} className="hover:text-orange-600" />
+          <div className="flex items-center gap-3">
+            <p className="bg-[#ff4d2d] text-white p-2 rounded-full hover:bg-orange-600 hover:text-white transition-all cursor-pointer">
+              <FaPen
+                size={18}
+                onClick={() => navigate(`/edit_food_items/${data._id}`)}
+              />
+            </p>
+            <p className="bg-[#ff4d2d] text-white p-2 rounded-full hover:bg-orange-600 hover:text-white transition-all cursor-pointer">
+              <FaTrash size={18} onClick={handleDelete} />
+            </p>
           </div>
         </div>
       </div>

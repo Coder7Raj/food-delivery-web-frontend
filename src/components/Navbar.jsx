@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { userData, currentCity } = useSelector((state) => state.user);
-  const { myShopData } = useSelector((state) => state.owner);
+  // const { myShopData } = useSelector((state) => state.owner);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -52,6 +52,7 @@ export default function Navbar() {
           {/*  */}
         </div>
       )}
+      {/* for user */}
       {userData.role == "user" && (
         <div className="relative cursor-pointer">
           <FiShoppingCart size={25} className="text-[#ff4d2d]" />
@@ -69,7 +70,7 @@ export default function Navbar() {
           </div>
         </>
       )} */}
-      {myShopData && (
+      {userData.role == "owner" && (
         <>
           <div
             onClick={() => navigate("/add_food_items")}
@@ -97,9 +98,11 @@ export default function Navbar() {
           </div>
         </>
       )}
+      {/* name */}
       <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#ff4d2d] text-white text-lg shadow-xl font-semibold cursor-pointer">
         {userData?.fullName.slice(0, 1).toUpperCase()}
       </div>
+      {/* logout button */}
       <button
         onClick={handleLogout}
         className="w-10 h-10 rounded-full flex items-center justify-center bg-[#ff4d2d] text-white text-lg shadow-xl font-semibold cursor-pointer"

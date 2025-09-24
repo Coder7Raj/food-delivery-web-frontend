@@ -32,6 +32,7 @@ export default function AddFoodItem() {
   const [foodType, setFoodType] = useState("veg");
   const [frontImage, setFrontImage] = useState(null);
   const [backImage, setBackImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -41,6 +42,7 @@ export default function AddFoodItem() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -57,9 +59,11 @@ export default function AddFoodItem() {
         { withCredentials: true }
       );
       dispatch(setMyShopData(result.data));
-      console.log("shop data", result.data);
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.log("form submit error", error);
+      setLoading(false);
     }
   };
 
@@ -88,7 +92,7 @@ export default function AddFoodItem() {
             </label>
             <input
               type="text"
-              placeholder="Enter Shop Name"
+              placeholder="Enter Food Name"
               className="w-full py-2 px-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               onChange={(e) => setName(e.target.value)}
               value={name}
@@ -156,8 +160,11 @@ export default function AddFoodItem() {
               </div>
             )}
           </div>
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 cursor-pointer rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all">
-            Add Food
+          <button
+            disabled={loading}
+            className="w-full bg-[#ff4d2d] text-white px-6 py-3 cursor-pointer rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all"
+          >
+            {loading ? "Adding Food..." : "Add Food"}
           </button>
         </form>
       </div>

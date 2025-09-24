@@ -1,19 +1,40 @@
-import React from "react";
 import Navbar from "./Navbar";
+// import { useDispatch, useSelector } from "react-redux";
 import { useSelector } from "react-redux";
 import { FaPen, FaUtensils } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import OwnerItemCard from "./OwnerItemCard";
+// import axios from "axios";
+// import { setMyShopData } from "../redux/ownerSlice";
+// import { serveruri } from "../App";
 
 export default function OwnerDashboard() {
   const { myShopData } = useSelector((state) => state.owner);
-  // console.log("my shop data item", myShopData?.item);
+  console.log("my shop data item", myShopData?.item);
   const navigate = useNavigate();
+
+  // const dispatch = useDispatch();
+  // const { myShopData } = useSelector((state) => state.owner);
+
+  // useEffect(() => {
+  //   const fetchShop = async () => {
+  //     try {
+  //       const res = await axios.get(`${serveruri}/api/shop/getmy_shop`, {
+  //         withCredentials: true,
+  //       });
+  //       dispatch(setMyShopData(res.data));
+  //     } catch (error) {
+  //       console.error("Error fetching shop:", error);
+  //     }
+  //   };
+
+  //   fetchShop();
+  // }, [dispatch]);
 
   return (
     <div className="w-full h-[100vh] bg-[#fff9f6] ">
-      <div className="flex justify-center items-center">
-        <Navbar />
+      <Navbar />
+      <div className="flex flex-col justify-center items-center pt-20">
         {!myShopData && (
           <>
             <div className="flex justify-center items-center p-4">
@@ -97,7 +118,7 @@ export default function OwnerDashboard() {
         )}
       </div>
       {myShopData?.item?.length > 0 && (
-        <div className="flex flex-col items-center gap-4 w-full max-w-3xl mx-auto mt-6">
+        <div className="flex flex-col items-center gap-4 w-full max-w-3xl mx-auto mt-6 pb-6">
           {myShopData?.item?.map((item, index) => (
             <OwnerItemCard data={item} key={index} />
           ))}

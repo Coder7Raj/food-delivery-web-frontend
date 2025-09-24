@@ -24,9 +24,9 @@ export default function CreatedEditShop() {
   );
   const [city, setCity] = useState(myShopData?.city ?? currentCity ?? "");
   const [state, setState] = useState(myShopData?.state ?? currentState ?? "");
-
   const [frontImage, setFrontImage] = useState(myShopData?.image || null);
   const [backImage, setBackImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -36,6 +36,7 @@ export default function CreatedEditShop() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -52,9 +53,11 @@ export default function CreatedEditShop() {
         { withCredentials: true }
       );
       dispatch(setMyShopData(result.data));
-      console.log("shop data", result.data);
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.log("form submit error", error);
+      setLoading(false);
     }
   };
 
@@ -149,8 +152,11 @@ export default function CreatedEditShop() {
               value={address}
             />
           </div>
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 cursor-pointer rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all">
-            Save Shop
+          <button
+            disabled={loading}
+            className="w-full bg-[#ff4d2d] text-white px-6 py-3 cursor-pointer rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all"
+          >
+            {loading ? "Saving..." : "Save Shop"}
           </button>
         </form>
       </div>
